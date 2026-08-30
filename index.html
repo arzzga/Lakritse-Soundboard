@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Soundboard</title>
+  <title>Lakritse Soundboard</title>
   <style>
     :root{
       --bg:#111827; --card:#1f2937; --card2:#273449; --text:#f9fafb;
@@ -46,17 +46,9 @@
 <body>
   <main class="wrap">
     <h1>Soundboard</h1>
-    <p>
-      Sounds listed in <code>sounds.js</code> are loaded automatically.
-      You can also temporarily add local files with the button below.
-    </p>
 
     <div class="toolbar">
-      <label class="file-label">
-        + Add local sounds
-        <input id="fileInput" type="file" accept="audio/*" multiple>
-      </label>
-      <button id="stopAll" class="secondary" type="button">Stop all</button>
+      <button id="stopAll" class="secondary" type="button">Pysäytä ääni.</button>
     </div>
 
     <section id="grid" class="grid" aria-label="Soundboard buttons"></section>
@@ -66,7 +58,6 @@
   <script src="sounds.js"></script>
   <script>
     const grid = document.getElementById("grid");
-    const fileInput = document.getElementById("fileInput");
     const stopAllBtn = document.getElementById("stopAll");
     const status = document.getElementById("status");
     const sounds = [];
@@ -124,17 +115,6 @@
 
     // Permanent hosted sounds from sounds.js
     (window.SOUNDBOARD_SOUNDS || []).forEach(item => addSound(item.name, item.file));
-
-    // Temporary local sounds selected from this device
-    fileInput.addEventListener("change", () => {
-      for (const file of fileInput.files) {
-        if (!file.type.startsWith("audio/")) continue;
-        const url = URL.createObjectURL(file);
-        const name = file.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ");
-        addSound(name, url);
-      }
-      fileInput.value = "";
-    });
 
     stopAllBtn.addEventListener("click", stopAll);
   </script>
