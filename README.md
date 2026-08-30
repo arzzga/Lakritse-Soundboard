@@ -20,5 +20,3 @@ window.SOUNDBOARD_SOUNDS = [
 
 ## Yms
 - Vain mp3 kiitos
-- The “Add local sounds” button is temporary and does not upload files to the server.
-- Permanent sounds must be placed in the `audio` folder and added to `sounds.js`.
