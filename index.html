@@ -52,7 +52,7 @@
     </div>
 
     <section id="grid" class="grid" aria-label="Soundboard buttons"></section>
-    <div id="status" class="status" aria-live="polite">Ready</div>
+    <div id="status" class="status" aria-live="polite">Paina nappia tai nussi pappia :P</div>
   </main>
 
   <script src="sounds.js"></script>
@@ -113,7 +113,6 @@
       sounds.push({ name, src, audio, button: play });
     }
 
-    // Permanent hosted sounds from sounds.js
     (window.SOUNDBOARD_SOUNDS || []).forEach(item => addSound(item.name, item.file));
 
     stopAllBtn.addEventListener("click", stopAll);
