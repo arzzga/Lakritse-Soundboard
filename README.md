@@ -15,7 +15,7 @@ window.SOUNDBOARD_SOUNDS = [
 ];
 ```
 
-4. Commit.
+4. Commit ja nauti.
 
 
 ## Yms
