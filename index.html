@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Soundboard</title>
+  <style>
+    :root{
+      --bg:#111827; --card:#1f2937; --card2:#273449; --text:#f9fafb;
+      --muted:#9ca3af; --accent:#3b82f6; --danger:#ef4444; --border:#374151;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      background:var(--bg); color:var(--text);
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:24px}
+    h1{margin:0 0 8px}
+    p{color:var(--muted)}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+    button,.file-label{
+      border:0;border-radius:10px;padding:12px 16px;font:inherit;
+      cursor:pointer;background:var(--accent);color:white;font-weight:600;
+    }
+    .secondary{background:transparent;border:1px solid var(--border)}
+    .danger{background:transparent;border:1px solid var(--danger);color:#fecaca}
+    input[type=file]{display:none}
+    .grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;
+    }
+    .sound{
+      border:1px solid var(--border);border-radius:14px;background:var(--card);
+      padding:12px;
+    }
+    .play{
+      width:100%;min-height:90px;background:var(--card2);border:1px solid var(--border);
+      font-size:18px;
+    }
+    .play.active{outline:2px solid var(--accent)}
+    .actions{display:flex;gap:8px;margin-top:10px}
+    .actions button{flex:1;padding:9px 10px;font-size:14px}
+    .status{margin-top:18px;color:var(--muted)}
+    code{background:#0b1220;padding:2px 6px;border-radius:5px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Soundboard</h1>
+    <p>
+      Sounds listed in <code>sounds.js</code> are loaded automatically.
+      You can also temporarily add local files with the button below.
+    </p>
+
+    <div class="toolbar">
+      <label class="file-label">
+        + Add local sounds
+        <input id="fileInput" type="file" accept="audio/*" multiple>
+      </label>
+      <button id="stopAll" class="secondary" type="button">Stop all</button>
+    </div>
+
+    <section id="grid" class="grid" aria-label="Soundboard buttons"></section>
+    <div id="status" class="status" aria-live="polite">Ready</div>
+  </main>
+
+  <script src="sounds.js"></script>
+  <script>
+    const grid = document.getElementById("grid");
+    const fileInput = document.getElementById("fileInput");
+    const stopAllBtn = document.getElementById("stopAll");
+    const status = document.getElementById("status");
+    const sounds = [];
+
+    function stopAll() {
+      sounds.forEach(s => {
+        s.audio.pause();
+        s.audio.currentTime = 0;
+        s.button.classList.remove("active");
+      });
+      status.textContent = "Stopped";
+    }
+
+    function addSound(name, src) {
+      const audio = new Audio(src);
+      audio.preload = "auto";
+
+      const card = document.createElement("div");
+      card.className = "sound";
+
+      const play = document.createElement("button");
+      play.className = "play";
+      play.type = "button";
+      play.textContent = name;
+
+      play.addEventListener("click", async () => {
+        if (!audio.paused) {
+          audio.pause();
+          audio.currentTime = 0;
+          play.classList.remove("active");
+          status.textContent = `Stopped ${name}`;
+          return;
+        }
+
+        stopAll();
+        try {
+          audio.currentTime = 0;
+          await audio.play();
+          play.classList.add("active");
+          status.textContent = `Playing ${name}`;
+        } catch (err) {
+          status.textContent = `Could not play ${name}`;
+        }
+      });
+
+      audio.addEventListener("ended", () => {
+        play.classList.remove("active");
+        status.textContent = "Ready";
+      });
+
+      card.appendChild(play);
+      grid.appendChild(card);
+      sounds.push({ name, src, audio, button: play });
+    }
+
+    // Permanent hosted sounds from sounds.js
+    (window.SOUNDBOARD_SOUNDS || []).forEach(item => addSound(item.name, item.file));
+
+    // Temporary local sounds selected from this device
+    fileInput.addEventListener("change", () => {
+      for (const file of fileInput.files) {
+        if (!file.type.startsWith("audio/")) continue;
+        const url = URL.createObjectURL(file);
+        const name = file.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ");
+        addSound(name, url);
+      }
+      fileInput.value = "";
+    });
+
+    stopAllBtn.addEventListener("click", stopAll);
+  </script>
+</body>
+</html>
