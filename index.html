@@ -97,15 +97,15 @@
           audio.currentTime = 0;
           await audio.play();
           play.classList.add("active");
-          status.textContent = `Playing ${name}`;
+          status.textContent = `Soitetaan ${name}`;
         } catch (err) {
-          status.textContent = `Could not play ${name}`;
+          status.textContent = `Ei toiminut ${name}`;
         }
       });
 
       audio.addEventListener("ended", () => {
         play.classList.remove("active");
-        status.textContent = "Ready";
+        status.textContent = "Paina nappia tai nussi pappia :P";
       });
 
       card.appendChild(play);
