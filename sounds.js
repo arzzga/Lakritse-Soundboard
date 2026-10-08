@@ -29,5 +29,9 @@ window.SOUNDBOARD_SOUNDS = [
   { name: "Sikanauta", file: "audio/Sikanauta.mp3" },
   { name: "UIIII", file: "audio/UIIII.mp3" },
   { name: "VitsinN-", file: "audio/VitsinN-.mp3" },
-  { name: "VoitTyöntää", file: "audio/VoitTyöntää.mp3" }
+  { name: "VoitTyöntää", file: "audio/VoitTyöntää.mp3" },
+  { name: "KoskaHänOn", file: "audio/KoskaHänOn.mp3" },
+  { name: "TöihinSieltä", file: "audio/TöihinSieltä.mp3" },
+  { name: "AYAYA", file: "audio/AYAYA.mp3" },
+  { name: "Lakusonni", file: "audio/Lakusonni.mp3" }  
 ];
